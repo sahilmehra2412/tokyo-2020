@@ -12,7 +12,7 @@
             <span>Total</span>
         </div>
         <template v-for="country of countries">
-            <Country v-bind:key="country['rank']" :country-data="country"/>
+            <Country v-bind:key="country['country_code']" :country-data="country"/>
         </template>
     </div>
 </template>
@@ -28,6 +28,9 @@ export default {
     data: function(){
         return{
             countries : [],
+            gold : 0,
+            silver : 0,
+            bronze : 0
         }
     },
     created: function(){
@@ -39,7 +42,7 @@ export default {
             const html = dom.parseFromString(result,'text/html');
             const tbody = html.getElementsByTagName('tbody');
             const elements = tbody[0].children;
-            elements.forEach((element, index) => {
+            elements.forEach((element) => {
                 let obj = {};
                 let gold = 0;
                 let silver = 0;
@@ -48,14 +51,19 @@ export default {
                     const name = elem.getAttribute('data-text');
                     if (elem?.children[0]?.getAttribute('title')?.includes('Gold')){
                         gold = parseInt(elem?.children[0].text);
+                        this.gold += gold;
                     }
                     if (elem?.children[0]?.getAttribute('title')?.includes('Silver')){
                         silver = parseInt(elem?.children[0].text);
+                        this.silver += silver;
                     }
                     if (elem?.children[0]?.getAttribute('title')?.includes('Bronze')){
                         bronze = parseInt(elem?.children[0].text);
+                        this.bronze += bronze;
                     }
-                    obj['rank'] = index+1;
+                    if (elem.children.length!=0 && elem.children[0].tagName === 'STRONG' && elem.getAttribute('class')=='text-center'){
+                        obj['rank'] = elem.children[0].innerText;
+                    }
                     if (name){
                         obj['country'] = name
                         obj['country_code'] = elem.children[0].getAttribute('country');

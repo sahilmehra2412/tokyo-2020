@@ -56,5 +56,13 @@ export default {
         height: 18px;
     }
 }
+#IND{
+    bottom: 0;
+    position: sticky;
+    top: 0;
+    height: 50px;
+    font-weight: 600;
+    font-size: 1.3em;
+}
 
 </style>
